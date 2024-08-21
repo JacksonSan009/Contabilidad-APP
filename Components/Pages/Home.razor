@@ -2,65 +2,67 @@
 @using System.Globalization
 @using System.Text.RegularExpressions
 @using System.Diagnostics
+@using Contabilidad_APP.Components.Models
+@using Contabilidad_APP.Components.Models.Util
 
 <h1>Cuentas del Día</h1>
 
-<input type="text" @bind-Value="description" placeholder="Gasto" />
-
 <InputText type="text" @bind-Value="rawAmount" @oninput="FormatCurrency" placeholder="Valor a ingresar" />
+<InputText type="text" @bind-Value="description" placeholder="Gasto" />
 
 <button class="btn btn-success" @onclick="AddDebit">+</button>
 
 <h3>Lista de Débitos:</h3>
-@if (debits.Count > 0)
+@if (debits.Any())
 {
-    <ul>
-        @foreach (var debit in debits)
+
+    <div class="list-group">
+        @foreach (var Debit in debits)
         {
-            <li>@debit</li>
+
+            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@Debit.FormattedAmount</h5>
+                    <small>@Debit.Date</small>
+                </div>
+                <p class="mb-1">@Debit.Description</p>
+            </a>
+
+
         }
-    </ul>
+    </div>
+
 }
 
 @code {
     private string rawAmount { get; set; } = "";
     private string description { get; set; } = "";
 
-    private List<string> debits { get; set; } = new List<string>();
-
-    private CultureInfo colombianCulture = new CultureInfo("es-CO");
-    private NumberStyles numberStyles = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
-
+    private List<Debit> debits { get; set; } = new List<Debit>();
+    
     private void FormatCurrency(ChangeEventArgs e)
     {
         string input = e.Value?.ToString() ?? "";
-        
-        string normalizedInput = input.Trim();
 
-        normalizedInput = normalizedInput.Replace(colombianCulture.NumberFormat.CurrencySymbol, "");
-        // no permite decimales
-        normalizedInput = normalizedInput.Replace(".", "").Replace(',', '.');
-                
-        if (decimal.TryParse(normalizedInput, numberStyles, colombianCulture, out decimal number))
-        {
-            rawAmount = string.Format(colombianCulture, "{0:C0}", number).Replace("$", "");
-        }
-        else
-        {
-            rawAmount = "";
-        }
+        rawAmount = CurrencyFormatter.FormatToCop(input);
     }
 
     private void AddDebit()
     {
-        if (decimal.TryParse(rawAmount, NumberStyles.Number, colombianCulture, out decimal amount))
+        if (rawAmount != "")
         {
-            debits.Add(string.Format(colombianCulture, "{0:C0}", amount));
-            rawAmount = "";
+            debits.Add(new Debit(decimal.Parse(rawAmount), DateTime.Now, description));
+            cleanForm();
         }
         else
         {
-            rawAmount = "";
+            cleanForm();
         }
+    }
+
+    private void cleanForm()
+    {
+        rawAmount = "";
+        description = "";
     }
 }
