@@ -11,7 +11,7 @@ namespace Contabilidad_APP
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("Nunito-ExtraLight.ttf", "Nunito");
                 });
 
             builder.Services.AddMauiBlazorWebView();

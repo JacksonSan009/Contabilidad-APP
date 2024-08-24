@@ -1,6 +1,10 @@
 ﻿html, body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito', sans-serif !important;
     background-color: #6c9c94;
+}
+
+h1, h2, h3, h4, h5, h6, p, div, span, a, input, button, label, .form-control {
+    font-family: 'Nunito', sans-serif !important;
 }
 
 
