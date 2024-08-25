@@ -1,4 +1,6 @@
-﻿html, body {
+﻿/*GLOBLAL STYLES*/
+
+html, body {
     font-family: 'Nunito', sans-serif !important;
     background-color: #6c9c94;
 }
@@ -7,37 +9,28 @@ h1, h2, h3, h4, h5, h6, p, div, span, a, input, button, label, .form-control {
     font-family: 'Nunito', sans-serif !important;
 }
 
-
-a, h, .btn-link {
+a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     color: #b8c6b4;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: #b8c6b4;
+/* UTILITY CLASSES */
+
+.list-group {
+    border-radius: 16px;
 }
 
-.color-nes-Slate-Blue {
-    background-color: #745cd0;
-}
-.color-nes-Medium-Purple {
-    background-color: #8c75e4;
-}
-.color-nes-Indigo {
-    background-color: #2c1d66;
-}
-.color-nes-Cyan {
-    background-color: #6c9c94;
-}
-.color-nes-Ash-Gray {
-    background-color: #b8c6b4;
-}
-.color-nes-Dark-Jungle-Green {
-    background-color: #1c2424;
+.list-group-item{
+    border: none;
 }
 
-.btn-primary {
-    color: #1c2424;
-    background-color: #8c75e4;
+.InputText, input {
+    border-width: 3px;
+}
+
+/* Apply the rounded-pill style to all buttons */
+.btn {
+    border-radius: 50rem !important; /* This mimics the .rounded-pill class from Bootstrap */
+    background-color: #8c75e4 !important;
     border-color: #1861ac;
 }
 

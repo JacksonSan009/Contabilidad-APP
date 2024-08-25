@@ -5,33 +5,48 @@
 @using Contabilidad_APP.Components.Models
 @using Contabilidad_APP.Components.Models.Util
 
-<h1>Cuentas del Día</h1>
+<h1 class="text-center">Cuentas del Día</h1>
+<div class="container">
 
-<InputText type="text" @bind-Value="rawAmount" @oninput="FormatCurrency" placeholder="Valor a ingresar" />
-<InputText type="text" @bind-Value="description" placeholder="Gasto" />
+    <div class="form-floating ">
 
-<button class="btn btn-success" @onclick="AddDebit">+</button>
+        <div class=" my-3 ">
+            <InputText class="form-control " type="text" id="valueInput" @bind-Value="rawAmount" @oninput="FormatCurrency" placeholder="Valor" />
+        </div>
 
-<h3>Lista de Débitos:</h3>
+        <div class=" my-3 ">
+            <InputText class="form-control" type="text" id="spendInput" @bind-Value="description" placeholder="Gasto" />
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center my-4">
+        <button class="btn btn-primary w-75" @onclick="AddDebit">ADD</button>
+    </div>
+</div>
+
+<h3 class="text-center">Lista de Débitos:</h3>
 @if (debits.Any())
 {
-
     <div class="list-group">
         @foreach (var Debit in debits)
         {
+            <a href="#" class="list-group-item ">
+                <div>
+                    <!-- Amount -->
+                    <p class="fw-bold fs-1 my-1">@Debit.FormattedAmount</p>
 
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">@Debit.FormattedAmount</h5>
-                    <small>@Debit.Date</small>
+                    <!-- Description -->
+                    <p class="text-muted fs-6 fst-italic my-0">@Debit.Description</p>
                 </div>
-                <p class="mb-1">@Debit.Description</p>
+
+                <div class="d-flex flex-column justify-content-end">
+                    <p class=" text-end mb-0">@Debit.Date</p>
+                </div>
             </a>
 
 
         }
     </div>
-
 }
 
 @code {
@@ -39,12 +54,23 @@
     private string description { get; set; } = "";
 
     private List<Debit> debits { get; set; } = new List<Debit>();
-    
+    private Regex regex = new Regex(@"^\d+$");
+
     private void FormatCurrency(ChangeEventArgs e)
     {
         string input = e.Value?.ToString() ?? "";
 
-        rawAmount = CurrencyFormatter.FormatToCop(input);
+        System.Diagnostics.Debug.WriteLine("input " + input);
+
+        if (regex.IsMatch(input))
+        {
+            rawAmount = CurrencyFormatter.FormatToCop(input);
+        }
+        else
+        {
+            rawAmount = "";
+        }
+
     }
 
     private void AddDebit()
