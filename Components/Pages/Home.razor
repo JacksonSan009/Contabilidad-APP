@@ -6,10 +6,19 @@
 @using Contabilidad_APP.Components.Models.Util
 
 
-<h1 class="text-center">Cuentas del Día</h1>
+<div class="d-flex align-items-center justify-content-between my-3">
+    <h1 class="mb-0">Cuentas del Día</h1>
+    <button class="btn btn-primary ms-auto" type="button">
+        <i class="bi bi-gear"></i>
+    </button>
+</div>
+
 
 <div class="container ">
 
+    <p class="fs-6 text-muted my-0">
+        Limite de gastos - $ @limitExpends
+    </p>
     <div class="progress">
         <div class="progress-bar" role="progressbar"
              style="width:@progressValue%;"
@@ -20,13 +29,12 @@
         </div>
     </div>
 
-
-    <p class="fw-bold fs-1 my-1">
-        Gastos disponibles diarios
-    </p>
 </div>
 
 <div class="container">
+    <p class="text-center fw-bold fs-2 my-1">
+        Gastos diarios
+    </p>
 
     <div class="form-floating ">
 
@@ -76,15 +84,15 @@
     private decimal limitExpends { get; set; } = 50000;
 
     private List<Debit> debits { get; set; } = new List<Debit>();
-        
+
     private void AddDebit()
     {
         if (rawAmount != 0 || description != "")
         {
             debits.Add(new Debit(rawAmount, DateTime.Now, description));
         }
-        
-            cleanForm();
+
+        cleanForm();
 
         this.progressValue = (calculateExpends() / limitExpends) * 100;
     }
