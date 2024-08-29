@@ -11,8 +11,15 @@
 <div class="container ">
 
     <div class="progress">
-        <div class="ProgressBar" role="ProgressBar" @bind-Value="ProgressValue" aria-valuenow="{ProgressValue}" aria-valuemin="0" aria-valuemax="100">{ProgressValue}%</div>
+        <div class="progress-bar" role="progressbar"
+             style="width:@progressValue%;"
+             aria-valuenow="@progressValue"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            @progressValue%
+        </div>
     </div>
+
 
     <p class="fw-bold fs-1 my-1">
         Gastos disponibles diarios
@@ -65,10 +72,13 @@
 @code {
     private string rawAmount { get; set; } = "";
     private string description { get; set; } = "";
+    private decimal progressValue { get; set; } = 0;
+    private decimal limitExpends { get; set; } = 50000;
 
     private List<Debit> debits { get; set; } = new List<Debit>();
 
-    private int ProgressValue { get; set; } = 70;
+
+
 
     private Regex regex = new Regex(@"^\d+$");
     private void FormatCurrency(ChangeEventArgs e)
@@ -99,6 +109,13 @@
         {
             cleanForm();
         }
+
+        this.progressValue = (calculateExpends() / limitExpends) * 100;
+    }
+
+    private decimal calculateExpends()
+    {
+        return debits.Sum(x => x.Amount);
     }
 
     private void cleanForm()
