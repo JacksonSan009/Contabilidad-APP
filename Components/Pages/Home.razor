@@ -5,7 +5,20 @@
 @using Contabilidad_APP.Components.Models
 @using Contabilidad_APP.Components.Models.Util
 
+
 <h1 class="text-center">Cuentas del Día</h1>
+
+<div class="container ">
+
+    <div class="progress">
+        <div class="ProgressBar" role="ProgressBar" @bind-Value="ProgressValue" aria-valuenow="{ProgressValue}" aria-valuemin="0" aria-valuemax="100">{ProgressValue}%</div>
+    </div>
+
+    <p class="fw-bold fs-1 my-1">
+        Gastos disponibles diarios
+    </p>
+</div>
+
 <div class="container">
 
     <div class="form-floating ">
@@ -54,8 +67,10 @@
     private string description { get; set; } = "";
 
     private List<Debit> debits { get; set; } = new List<Debit>();
-    private Regex regex = new Regex(@"^\d+$");
 
+    private int ProgressValue { get; set; } = 70;
+
+    private Regex regex = new Regex(@"^\d+$");
     private void FormatCurrency(ChangeEventArgs e)
     {
         string input = e.Value?.ToString() ?? "";
