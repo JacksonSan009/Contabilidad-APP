@@ -18,7 +18,5 @@ namespace Contabilidad_APP.Components.Models
             _date = date;
             _description = description;
         }
-
-        public string FormattedAmount => CurrencyFormatter.FormatToCop(_amount.ToString());
     }
 }

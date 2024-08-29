@@ -31,7 +31,7 @@
     <div class="form-floating ">
 
         <div class=" my-3 ">
-            <InputText class="form-control " type="text" id="valueInput" @bind-Value="rawAmount" @oninput="FormatCurrency" placeholder="Valor" />
+            <InputText class="form-control " type="text" id="valueInput" @bind-Value="rawAmount" placeholder="Valor" />
         </div>
 
         <div class=" my-3 ">
@@ -47,13 +47,13 @@
 <h3 class="text-center">Lista de Débitos:</h3>
 @if (debits.Any())
 {
-    <div class="list-group">
+    <div class="list-group ">
         @foreach (var Debit in debits)
         {
-            <a href="#" class="list-group-item ">
+            <a href="#" class="list-group-item fade show">
                 <div>
                     <!-- Amount -->
-                    <p class="fw-bold fs-1 my-1">@Debit.FormattedAmount</p>
+                    <p class="fw-bold fs-1 my-1">@CurrencyFormatter.FormatToCop(Debit.Amount.ToString())</p>
 
                     <!-- Description -->
                     <p class="text-muted fs-6 fst-italic my-0">@Debit.Description</p>
@@ -76,28 +76,9 @@
     private decimal limitExpends { get; set; } = 50000;
 
     private List<Debit> debits { get; set; } = new List<Debit>();
-
-
-
-
-    private Regex regex = new Regex(@"^\d+$");
-    private void FormatCurrency(ChangeEventArgs e)
-    {
-        string input = e.Value?.ToString() ?? "";
-
-        System.Diagnostics.Debug.WriteLine("input " + input);
-
-        if (regex.IsMatch(input))
-        {
-            rawAmount = CurrencyFormatter.FormatToCop(input);
-        }
-        else
-        {
-            rawAmount = "";
-        }
-
-    }
-
+    private Regex regex = new Regex(@"^\$?(\d{1,3}(,\d{3})*|(\d+))(\.\d{0,2})?$");
+    // regex.IsMatch(input) ?
+        
     private void AddDebit()
     {
         if (rawAmount != "")
