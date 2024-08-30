@@ -1,0 +1,51 @@
+﻿@using Contabilidad_APP.Components.Models
+@inject Config Config;
+
+
+<button type="button" class="btn btn-primary ms-auto"
+        data-bs-toggle="modal" data-bs-target="#modal">
+    <i class="bi bi-gear"></i>
+</button>
+
+
+<div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+                <label for="limitExpends">Limite a gastar</label>
+                <InputNumber class="form-control " type="number" id="limitExpends" @bind-Value="_limitExpends" placeholder="Valor limite a gastar por día" />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="ToggleModal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="SaveChanges">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private bool showModal = false;
+    private decimal _limitExpends;
+
+    private void ToggleModal()
+    {
+        showModal = !showModal;
+    }
+
+    protected override void OnInitialized()
+    {
+        _limitExpends = Config.LimitExpends;
+    }
+
+    private void SaveChanges()
+    {
+        // Logic to save changes, including updating the Config instance
+        Config.LimitExpends = _limitExpends;
+        StateHasChanged();
+        showModal = false;
+    }
+}

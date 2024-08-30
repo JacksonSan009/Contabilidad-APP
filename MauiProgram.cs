@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Contabilidad_APP.Components.Models;
 
 namespace Contabilidad_APP
 {
@@ -14,6 +15,7 @@ namespace Contabilidad_APP
                     fonts.AddFont("Nunito-ExtraLight.ttf", "Nunito");
                 });
 
+            builder.Services.AddSingleton<Config>();
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG

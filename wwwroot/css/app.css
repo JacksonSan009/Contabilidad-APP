@@ -23,7 +23,7 @@ a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     border: none;
 }
 
-.InputText, input {
+.InputText, InputNumber, input {
     border-width: 3px;
 }
 

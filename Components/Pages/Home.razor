@@ -4,20 +4,21 @@
 @using System.Diagnostics
 @using Contabilidad_APP.Components.Models
 @using Contabilidad_APP.Components.Models.Util
+@using Contabilidad_APP.Components.Layout
+
+@inject Config Config;
 
 
 <div class="d-flex align-items-center justify-content-between my-3">
     <h1 class="mb-0">Cuentas del Día</h1>
-    <button class="btn btn-primary ms-auto" type="button">
-        <i class="bi bi-gear"></i>
-    </button>
+    <ConfigButton></ConfigButton>
 </div>
 
 
 <div class="container ">
 
     <p class="fs-6 text-muted my-0">
-        Limite de gastos - $ @limitExpends
+        Limite de gastos - $ @Config.LimitExpends
     </p>
     <div class="progress">
         <div class="progress-bar" role="progressbar"
@@ -81,8 +82,7 @@
     private decimal rawAmount { get; set; } = 0;
     private string description { get; set; } = "";
     private decimal progressValue { get; set; } = 0;
-    private decimal limitExpends { get; set; } = 50000;
-
+    
     private List<Debit> debits { get; set; } = new List<Debit>();
 
     private void AddDebit()
@@ -94,7 +94,7 @@
 
         cleanForm();
 
-        this.progressValue = (calculateExpends() / limitExpends) * 100;
+        this.progressValue = (calculateExpends() / Config.LimitExpends) * 100;
     }
 
     private decimal calculateExpends()
