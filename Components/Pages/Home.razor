@@ -47,7 +47,7 @@
 @if (Debits.Any())
 {
     <div class="list-group">
-        @foreach (var debit in Debits)
+        @foreach (var debit in Debits.OrderByDescending(d => d.Date))
         {
             <a href="#" class="list-group-item fade show">
                 <div>
