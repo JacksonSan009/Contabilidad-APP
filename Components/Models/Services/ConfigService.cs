@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contabilidad_APP.Components.Models
+namespace Contabilidad_APP.Components.Models.Services
 {
     public class Config
     {

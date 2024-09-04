@@ -9,31 +9,18 @@ namespace Contabilidad_APP.Components.Models.Util
 
         public static string FormatToCop(string amount)
         {
-
             // no permite decimales
-            amount.Trim()
-                .Replace(colombianCulture.NumberFormat.CurrencySymbol, "")
-                //.Replace(".", "")
-                //.Replace(',', '.')
-                ;
+            amount.Trim().Replace(colombianCulture.NumberFormat.CurrencySymbol, "");
 
-            System.Diagnostics.Debug.WriteLine("amount: " + amount);
-            string result = "";
             if (decimal.TryParse(amount, numberStyles, colombianCulture, out decimal number))
             {
-                System.Diagnostics.Debug.WriteLine($"Successfully converted: {number}"); // Outputs: 1234.56
-                result = String.Format(colombianCulture, "{0:C0}", number).ToString();
+                return String.Format(colombianCulture, "{0:C0}", number).ToString();
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Failed to convert the input.");
+                return amount.ToString();
             }
-
-
-
-            System.Diagnostics.Debug.WriteLine("result " + result);
-
-            return result;
         }
     }
 }

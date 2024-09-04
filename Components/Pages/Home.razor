@@ -3,47 +3,37 @@
 @using System.Text.RegularExpressions
 @using System.Diagnostics
 @using Contabilidad_APP.Components.Models
+@using Contabilidad_APP.Components.Models.Services
 @using Contabilidad_APP.Components.Models.Util
 @using Contabilidad_APP.Components.Layout
+@using Microsoft.AspNetCore.Components.Rendering
 
 @inject Config Config;
-
 
 <div class="d-flex align-items-center justify-content-between my-3">
     <h1 class="mb-0">Cuentas del Día</h1>
     <ConfigButton></ConfigButton>
 </div>
 
-
-<div class="container ">
-
+<div class="container">
     <p class="fs-6 text-muted my-0">
         Limite de gastos - $ @Config.LimitExpends
     </p>
     <div class="progress">
-        <div class="progress-bar" role="progressbar"
-             style="width:@progressValue%;"
-             aria-valuenow="@progressValue"
-             aria-valuemin="0"
-             aria-valuemax="100">
+        <div class="progress-bar" role="progressbar" style="width:@progressValue%;" aria-valuenow="@progressValue" aria-valuemin="0" aria-valuemax="100">
             @progressValue%
         </div>
     </div>
-
 </div>
 
 <div class="container">
-    <p class="text-center fw-bold fs-2 my-1">
-        Gastos diarios
-    </p>
+    <p class="text-center fw-bold fs-2 my-1">Gastos diarios</p>
 
-    <div class="form-floating ">
-
-        <div class=" my-3 ">
-            <InputNumber class="form-control " type="text" id="valueInput" @bind-Value="rawAmount" placeholder="Valor" />
+    <div class="form-floating">
+        <div class="my-3">
+            <InputNumber class="form-control" type="text" id="valueInput" @bind-Value="amount" placeholder="Valor" />
         </div>
-
-        <div class=" my-3 ">
+        <div class="my-3">
             <InputText class="form-control" type="text" id="spendInput" @bind-Value="description" placeholder="Gasto" />
         </div>
     </div>
@@ -54,57 +44,94 @@
 </div>
 
 <h3 class="text-center">Lista de Débitos:</h3>
-@if (debits.Any())
+@if (Debits.Any())
 {
-    <div class="list-group ">
-        @foreach (var Debit in debits)
+    <div class="list-group">
+        @foreach (var debit in Debits)
         {
             <a href="#" class="list-group-item fade show">
                 <div>
                     <!-- Amount -->
-                    <p class="fw-bold fs-1 my-1">@CurrencyFormatter.FormatToCop(Debit.Amount.ToString())</p>
-
+                    <p class="fw-bold fs-1 my-1">@CurrencyFormatter.FormatToCop(debit.Amount.ToString())</p>
                     <!-- Description -->
-                    <p class="text-muted fs-6 fst-italic my-0">@Debit.Description.ToUpper()</p>
+                    <p class="text-muted fs-6 fst-italic my-0">@debit.Description.ToUpper()</p>
                 </div>
-
                 <div class="d-flex flex-column justify-content-end">
-                    <p class=" text-end mb-0">@Debit.Date</p>
+                    <p class="text-end mb-0">@debit.Date</p>
                 </div>
             </a>
-
-
         }
     </div>
 }
 
 @code {
-    private decimal rawAmount { get; set; } = 0;
+    private decimal amount { get; set; } = 0m;
     private string description { get; set; } = "";
-    private decimal progressValue { get; set; } = 0;
-    
-    private List<Debit> debits { get; set; } = new List<Debit>();
+    private decimal progressValue { get; set; } = 0m;
+    private List<Debit> Debits { get; set; } = new List<Debit>();
+    private StorageManager<List<Debit>> fileStorageManager;
+    private Task loadingTask;
 
-    private void AddDebit()
+    protected override async Task OnInitializedAsync()
     {
-        if (rawAmount != 0 || description != "")
+        fileStorageManager = new StorageManager<List<Debit>>(
+            new FileStorageService<List<Debit>>("accountingData.json")
+        );
+
+        loadingTask = LoadDebitDataAsync();
+        await loadingTask;
+        CalculateProgress();
+    }
+
+    private async Task LoadDebitDataAsync()
+    {
+        Debits = await LoadDebitData() ?? new List<Debit>();
+    }
+
+    private async Task SaveDebitDataAsync()
+    {
+        await fileStorageManager.SaveDataAsync(Debits);
+    }
+
+    private async Task<List<Debit>> LoadDebitData()
+    {
+        return await fileStorageManager.LoadDataAsync();
+    }
+
+    private async Task AddDebit()
+    {
+        if (amount > 0 && !string.IsNullOrWhiteSpace(description))
         {
-            debits.Add(new Debit(rawAmount, DateTime.Now, description));
+            Debits.Add(new Debit(amount, DateTime.Now, description));
+            await SaveDebitDataAsync();
+            CalculateProgress();
+            StateHasChanged();
         }
 
-        cleanForm();
-
-        this.progressValue = (calculateExpends() / Config.LimitExpends) * 100;
+        ResetForm();
     }
 
-    private decimal calculateExpends()
+    private void CalculateProgress()
     {
-        return debits.Sum(x => x.Amount);
+        if (Config.LimitExpends == 0)
+        {
+            progressValue = 0; // Avoid division by zero
+        }
+        else
+        {
+            progressValue = (CalculateExpenses() / Config.LimitExpends) * 100;
+        }
     }
 
-    private void cleanForm()
+
+    private decimal CalculateExpenses()
     {
-        rawAmount = 0;
-        description = "";
+        return Debits.Sum(x => x.Amount);
+    }
+
+    private void ResetForm()
+    {
+        amount = 0;
+        description = string.Empty;
     }
 }

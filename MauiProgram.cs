@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using Contabilidad_APP.Components.Models;
+using Contabilidad_APP.Components.Models.Services;
+using Contabilidad_APP.Components.Models.Interfaces;
 
 namespace Contabilidad_APP
 {
@@ -16,6 +17,12 @@ namespace Contabilidad_APP
                 });
 
             builder.Services.AddSingleton<Config>();
+
+            // Register the storage services
+            builder.Services.AddSingleton(typeof(IStorageService<>), typeof(FileStorageService<>));
+            builder.Services.AddSingleton<PreferencesService>();
+
+
             builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG

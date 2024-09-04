@@ -1,51 +1,61 @@
-﻿@using Contabilidad_APP.Components.Models
-@inject Config Config;
+﻿@using Contabilidad_APP.Components.Models.Services
+@using Contabilidad_APP.Components.Models.Util
 
+@inject Config Config;
+@inject IJSRuntime JS;
+@inject NavigationManager Navigation;
 
 <button type="button" class="btn btn-primary ms-auto"
         data-bs-toggle="modal" data-bs-target="#modal">
     <i class="bi bi-gear"></i>
 </button>
 
-
 <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            
             <div class="modal-body">
                 <label for="limitExpends">Limite a gastar</label>
-                <InputNumber class="form-control " type="number" id="limitExpends" @bind-Value="_limitExpends" placeholder="Valor limite a gastar por día" />
+                <InputNumber class="form-control" type="number" id="limitExpends" @bind-Value="_limitExpends" placeholder="Valor limite a gastar por día" />
             </div>
-
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="ToggleModal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cerrar</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="SaveChanges">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 @code {
-    private bool showModal = false;
-    private decimal _limitExpends;
+    private decimal _limitExpends = 50000m;
+    private StorageManager<decimal> preferencesManager;
 
-    private void ToggleModal()
+    protected override async Task OnInitializedAsync()
     {
-        showModal = !showModal;
-    }
+        preferencesManager = new StorageManager<decimal>(
+           new PreferencesService("Config")
+        );
 
-    protected override void OnInitialized()
-    {
-        _limitExpends = Config.LimitExpends;
-    }
-
-    private void SaveChanges()
-    {
-        // Logic to save changes, including updating the Config instance
+        _limitExpends = await preferencesManager.LoadDataAsync();
         Config.LimitExpends = _limitExpends;
-        StateHasChanged();
-        showModal = false;
+    }
+
+    private async Task SaveChanges()
+    {
+        await SaveLimitExpends(_limitExpends); // Save the limit value
+        Config.LimitExpends = _limitExpends; // Update Config with the saved value
+
+        await CloseModal(); // Close the modal after saving changes
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true); // Refresh the page to reflect the changes
+    }
+
+    private async Task SaveLimitExpends(decimal limitExpends)
+    {
+        await preferencesManager.SaveDataAsync(limitExpends);
+    }
+
+    private async Task CloseModal()
+    {
+        var modalReference = await JS.InvokeAsync<IJSObjectReference>("bootstrap.Modal.getOrCreateInstance", "#modal");
+        await modalReference.InvokeVoidAsync("hide");
     }
 }
