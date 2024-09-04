@@ -119,7 +119,7 @@
         }
         else
         {
-            progressValue = (CalculateExpenses() / Config.LimitExpends) * 100;
+            progressValue = Math.Round((CalculateExpenses() / Config.LimitExpends) * 100);
         }
     }
 
