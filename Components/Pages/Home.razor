@@ -46,10 +46,10 @@
 <h3 class="text-center">Lista de Débitos:</h3>
 @if (Debits.Any())
 {
-    <div class="list-group">
+    <div class="list-group position-relative">
         @foreach (var debit in Debits.OrderByDescending(d => d.Date))
         {
-            <a href="#" class="list-group-item fade show">
+            <a href="#" class="list-group-item fade show position-relative" style="padding-right: 2.5rem;">
                 <div>
                     <!-- Amount -->
                     <p class="fw-bold fs-1 my-1">@CurrencyFormatter.FormatToCop(debit.Amount.ToString())</p>
@@ -59,9 +59,15 @@
                 <div class="d-flex flex-column justify-content-end">
                     <p class="text-end mb-0">@debit.Date</p>
                 </div>
+
+                <!-- X Button in top right corner -->
+                <button type="button" class="btn btn-sm btn-close position-absolute top-0 end-0 me-2 mt-2"
+                        data-debit-id="@debit.Id" aria-label="Delete Debit Entry" @onclick="() => DeleteDebit(debit)">
+                </button>
             </a>
         }
     </div>
+
 }
 
 @code {
@@ -70,7 +76,6 @@
     private decimal progressValue { get; set; } = 0m;
     private List<Debit> Debits { get; set; } = new List<Debit>();
     private StorageManager<List<Debit>> fileStorageManager;
-    private Task loadingTask;
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,7 +83,7 @@
             new FileStorageService<List<Debit>>("accountingData.json")
         );
 
-        loadingTask = LoadDebitDataAsync();
+       var  loadingTask = LoadDebitDataAsync();
         await loadingTask;
         CalculateProgress();
     }
@@ -96,6 +101,19 @@
     private async Task<List<Debit>> LoadDebitData()
     {
         return await fileStorageManager.LoadDataAsync();
+    }
+
+    private async Task DeleteDebit(Debit debitToDelete)
+    {
+        // Find the debit by ID or another criteria
+        var index = Debits.IndexOf(debitToDelete);
+        if (index != -1)
+        {
+            Debits.RemoveAt(index);
+            await SaveDebitDataAsync(); // Save updated list to local storage
+            CalculateProgress();
+            StateHasChanged();
+        }
     }
 
     private async Task AddDebit()
