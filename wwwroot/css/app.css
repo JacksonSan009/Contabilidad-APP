@@ -5,7 +5,7 @@ html, body {
     background-color: #6c9c94;
 }
 
-h1, h2, h3, h4, h5, h6, p, div, span, a, input, button, label, .form-control {
+h1, h2, h3, h4, h5, h6, p, div, span, a, input, button, .btn, label, .form-control {
     font-family: 'Nunito', sans-serif !important;
 }
 
@@ -13,13 +13,30 @@ a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     color: #b8c6b4;
 }
 
+/* Apply the rounded-pill style to all buttons */
+.btn {
+    border-radius: 50rem !important; /* This mimics the .rounded-pill class from Bootstrap */
+    background-color: #8c75e4 !important;
+    border-color: #1861ac;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.3);
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
 /* UTILITY CLASSES */
+.progress-bar {
+    transition: width 0.5s ease;
+}
 
 .list-group {
     border-radius: 16px;
 }
 
-.list-group-item{
+.list-group-item {
     border: none;
 }
 
@@ -27,16 +44,7 @@ a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     border-width: 3px;
 }
 
-/* Apply the rounded-pill style to all buttons */
-.btn {
-    border-radius: 50rem !important; /* This mimics the .rounded-pill class from Bootstrap */
-    background-color: #8c75e4 !important;
-    border-color: #1861ac;
-}
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
 
 .content {
     padding-top: 1.1rem;

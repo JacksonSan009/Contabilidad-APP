@@ -7,6 +7,7 @@
             InitializeComponent();
 
             MainPage = new MainPage();
+            Application.Current.Resources["AppTitle"] = "Daily Count";
         }
     }
 }
