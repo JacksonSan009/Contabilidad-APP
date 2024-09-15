@@ -55,10 +55,10 @@ a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     border: none;
 }
 
-    .nav-link {
-        color: white;
-        fill: white;
-    }
+.nav-link {
+    color: white;
+    fill: white;
+}
 
 .content {
     padding-top: 1.1rem;
