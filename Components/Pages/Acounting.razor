@@ -1,8 +1,73 @@
 ﻿@page "/acounting"
 
-<h3>Acounting</h3>
+<div class="expense-report">
 
+    <h2 class="text-center">Gastos del mes: MES </h2>
+
+    <div class="btn-group mx-3" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-primary">Semana</button>
+        <button type="button" class="btn btn-primary">2 Semanas</button>
+        <button type="button" class="btn btn-primary">Mes entero</button>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>MES:</p>
+            </div>
+            <div class="col">
+                <p>$100.000</p>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Mes</th>
+                <th>Gastos totales</th>
+                <th>Limite de gastos</th>
+                <th>Gastos excedidos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* @foreach (var report in MonthlyExpenseReports)
+            { *@
+                <tr>
+                    <td>Month</td>
+                    <td>TotalExpenses.ToString("C2")</td>
+                    <td>ExceedsLimit ? "Yes" : "No"</td>
+                    <td>ExcessAmount.ToString("C2")</td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table>
+                        </table>
+                    </td>
+                </tr>
+            @* } *@
+        </tbody>
+    </table>
+</div>
 
 @code {
+
+    public class MonthlyExpenseReport
+    {
+        public string Month { get; set; }
+        public decimal TotalExpenses { get; set; }
+        public List<WeeklyExpense> WeeklyExpenses { get; set; } = new();
+
+        public bool ExceedsLimit { get; set; }
+        public decimal ExcessAmount { get; set; }
+    }
+
+    public class WeeklyExpense
+    {
+        public DateTime WeekStart { get; set; }
+        public decimal Total { get; set; }
+    }
 
 }
