@@ -44,6 +44,10 @@ a, h, p, .btn, .btn-link, .text-muted, h1, h2, h3, h4, h5, h6 {
     border-width: 3px;
 }
 
+.btn-group {
+    gap: 1rem;
+}
+
 /* Nav Bar */
 .nav-tabs-bottom.fixed-bottom {
     background-color: #8c75e4;
