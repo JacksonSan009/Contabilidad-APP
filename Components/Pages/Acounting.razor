@@ -2,72 +2,56 @@
 
 <div class="expense-report">
 
-    <h2 class="text-center">Gastos del mes: MES </h2>
+    <h2 class="text-center">Historial de Gastos</h2>
 
-    <div class="btn-group mx-3" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-primary">Semana</button>
-        <button type="button" class="btn btn-primary">2 Semanas</button>
-        <button type="button" class="btn btn-primary">Mes entero</button>
-    </div>
+    <div class="d-flex align-items-center justify-content-center my-2">
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <p>MES:</p>
-            </div>
-            <div class="col">
-                <p>$100.000</p>
-            </div>
-            
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary">Semana</button>
+            <button type="button" class="btn btn-primary">2 Semanas</button>
+            <button type="button" class="btn btn-primary">Mes entero</button>
         </div>
     </div>
 
+    <div class="container">
+        <div id="carouselExampleControls" class="carousel slide  mx-4 " data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active ">
+                    <p class="text-muted fs-4 fst-italic fw-bold d-flex align-items-center justify-content-center">
+                        @DateTime.Now
+                    </p>
+                </div>
+                <div class="carousel-item ">
+                    <p class="text-muted fs-4 fst-italic fw-bold d-flex align-items-center justify-content-center">
+                        TEXT 1</p>
+                </div>
+            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Mes</th>
-                <th>Gastos totales</th>
-                <th>Limite de gastos</th>
-                <th>Gastos excedidos</th>
-            </tr>
-        </thead>
-        <tbody>
-            @* @foreach (var report in MonthlyExpenseReports)
-            { *@
-                <tr>
-                    <td>Month</td>
-                    <td>TotalExpenses.ToString("C2")</td>
-                    <td>ExceedsLimit ? "Yes" : "No"</td>
-                    <td>ExcessAmount.ToString("C2")</td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <table>
-                        </table>
-                    </td>
-                </tr>
-            @* } *@
-        </tbody>
-    </table>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    @*
+    <div class="container">
+    <div class="row">
+    <div class="col">
+    <p>MES:</p>
+    </div>
+    <div class="col">
+    <p>$100.000</p>
+    </div>
+
+    </div>
+    </div>
+    *@
 </div>
 
 @code {
-
-    public class MonthlyExpenseReport
-    {
-        public string Month { get; set; }
-        public decimal TotalExpenses { get; set; }
-        public List<WeeklyExpense> WeeklyExpenses { get; set; } = new();
-
-        public bool ExceedsLimit { get; set; }
-        public decimal ExcessAmount { get; set; }
-    }
-
-    public class WeeklyExpense
-    {
-        public DateTime WeekStart { get; set; }
-        public decimal Total { get; set; }
-    }
 
 }
