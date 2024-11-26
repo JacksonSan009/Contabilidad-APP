@@ -2,7 +2,7 @@
 
 <div class="expense-report">
 
-    <h2 class="text-center">Gastos del mes: MES </h2>
+    <h2 class="text-center">Historial de Gastos</h2>
 
     <div class="d-flex align-items-center justify-content-center my-2">
 
@@ -14,12 +14,19 @@
     </div>
 
     <div class="container">
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleControls" class="carousel slide  mx-4 " data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <p class="text-muted fs-6 fst-italic fw-bold my-0">@DateTime.Now</p>
+                <div class="carousel-item active ">
+                    <p class="text-muted fs-4 fst-italic fw-bold d-flex align-items-center justify-content-center">
+                        @DateTime.Now
+                    </p>
+                </div>
+                <div class="carousel-item ">
+                    <p class="text-muted fs-4 fst-italic fw-bold d-flex align-items-center justify-content-center">
+                        TEXT 1</p>
                 </div>
             </div>
+
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -30,19 +37,19 @@
             </button>
         </div>
     </div>
-
+    @*
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <p>MES:</p>
-            </div>
-            <div class="col">
-                <p>$100.000</p>
-            </div>
-
-        </div>
+    <div class="row">
+    <div class="col">
+    <p>MES:</p>
+    </div>
+    <div class="col">
+    <p>$100.000</p>
     </div>
 
+    </div>
+    </div>
+    *@
 </div>
 
 @code {
